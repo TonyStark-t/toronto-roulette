@@ -9,6 +9,7 @@ Vue.use(Vuetify);
 
 Vue.component('test-component', require('./components/Test.vue').default);
 Vue.component('list-component', require('./components/practice/OnlyListInVue.vue').default);
+Vue.component('roulette-list-component', require('./components/roulette/List.vue').default);
 
 const app = new Vue({
     el: '#app',

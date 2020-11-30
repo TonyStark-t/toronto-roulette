@@ -16,3 +16,8 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/slots', 'SlotsController@index');
+Route::post('/slot/create', 'SlotsController@create');
+Route::post('/slot/edit', 'SlotsController@edit');
+Route::post('/slot/delete', 'SlotsController@delete');

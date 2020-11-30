@@ -22,3 +22,7 @@ Route::get('/test', function () {
 Route::get('/list', function () {
     return view('List');
 });
+
+Route::get('/roulette', function () {
+    return view('Roulette');
+});
