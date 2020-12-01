@@ -25,7 +25,7 @@
                         Add Element
                         </v-btn>
                     </template>
-                    <v-card>
+                    <v-card style="overflow: hidden;">
                         <p>Do you add a new element?</p>
                         <v-text-field
                             v-model="addElement"
@@ -33,6 +33,14 @@
                             placeholder="test"
                             outlined
                         ></v-text-field>
+                        <v-select
+                            v-model="selectedStatus"
+                            :items="selectStatus"
+                            itemText="status"
+                            label="status"
+                            placeholder="Choose Status"
+                            outlined
+                        ></v-select>
                         <v-btn
                             outlined
                             color="indigo"
@@ -97,19 +105,22 @@
             max-width="500"
         >
             <v-card>
-                <p>Do you edit the selected element? :{{}}</p>
+                <p>Do you edit the selected element?</p>
+                <p style="border: solid 2px #EDEDED">Selected Element : {{ editElement }}</p>
                 <v-text-field
                     v-model="editElement"
                     label="elemet"
                     placeholder="test"
                     outlined
                 ></v-text-field>
-                <v-text-field
-                    v-model="editStatus"
+                <v-select
+                    v-model="selectedStatus"
+                    :items="selectStatus"
+                    itemText="status"
                     label="status"
-                    placeholder="status"
+                    placeholder="Choose Status"
                     outlined
-                ></v-text-field>
+                ></v-select>
                 <v-btn
                     outlined
                     color="indigo"
@@ -143,7 +154,8 @@
             max-width="500"
         >
             <v-card>
-                <p>Are you sure you want to delete the selected element? :{{}}</p>
+                <p>Are you sure you want to delete the selected element?</p>
+                <p  style="border: solid 2px #EDEDED">Selected Element : {{ selectedElement }}</p>
                 <v-btn
                     outlined
                     color="error"
@@ -223,13 +235,17 @@ export default {
                 {text: "actions", value: "actions", class: "white--text blue-grey darken-1"},
             ],
             slotItems:[],
+            selectStatus:[
+                {value: 1, status: 'enable'},
+                {value: 2, status: 'disable'}
+            ],
             page: 1,
             pageCount: 0,
             itemPerPage: 5,
             addElement:"",
             createDialog: false,
             createSuccess: false,
-            status: "enable",
+            status: "",
             editDialog: false,
             delDialog: false,
             editElement: "",
@@ -239,7 +255,9 @@ export default {
             selectedId:"",
             message: "",
             runDialog: "",
-            result: ""
+            result: "",
+            selectedStatus: "",
+            selectedElement: ""
         }
     },
     mounted() {
@@ -257,6 +275,13 @@ export default {
                 })
         },
         create() {
+            if(this.selectedStatus === 1) {
+                this.status = "enable";
+            } else {
+                this.status = "disable";
+            }
+            console.log(this.status)
+
             axios
                 .post('/api/slot/create', {
                     element: this.addElement,
@@ -266,10 +291,19 @@ export default {
                     console.log(this.addElement)
                     this.createDialog = false;
                     this.createSuccess = true;
+                    this.addElement = "";
+                    this.status = "";
+                    this.selectStatus = "";
                     this.search();
                 })
         },
         edit() {
+            if(this.selectedStatus === 1) {
+                this.status = "enable";
+            } else {
+                this.status = "disable";
+            }
+
             axios
                 .post('/api/slot/edit', {
                     id: this.selectedId,
@@ -280,6 +314,10 @@ export default {
                     console.log(this.addElement)
                     this.editDialog = false;
                     this.editSuccess = true;
+                    this.selectedId = "";
+                    this.editElement = "";
+                    this.status = "";
+                    this.selectedStatus = "";
                     this.search();
                 })
         },
@@ -287,11 +325,18 @@ export default {
             console.log(item)
             this.editDialog = true;
             this.selectedId = item.id;
+            this.editElement = item.element;
+            if(item.status === "enable") {
+                this.selectedStatus = 1;
+            } else {
+                this.selectedStatus = 2;
+            }
         },
         delFlg(item) {
             console.log(item.id)
             this.delDialog = true;
             this.selectedId = item.id;
+            this.selectedElement = item.element;
         },
         del() {
             axios
