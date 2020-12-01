@@ -21,3 +21,4 @@ Route::get('/slots', 'SlotsController@index');
 Route::post('/slot/create', 'SlotsController@create');
 Route::post('/slot/edit', 'SlotsController@edit');
 Route::post('/slot/delete', 'SlotsController@delete');
+Route::get('/slot/run', 'SlotsController@runRoulette');

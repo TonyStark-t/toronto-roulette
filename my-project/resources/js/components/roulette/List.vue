@@ -12,7 +12,7 @@
                 <v-dialog
                     v-model="createDialog"
                     persistent
-                    max-width="400"
+                    max-width="500"
                 >
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn
@@ -25,10 +25,7 @@
                         Add Element
                         </v-btn>
                     </template>
-                    <v-card
-                        height=400
-                        width=400
-                    >
+                    <v-card>
                         <p>Do you add a new element?</p>
                         <v-text-field
                             v-model="addElement"
@@ -38,11 +35,12 @@
                         ></v-text-field>
                         <v-btn
                             outlined
-                            color="error"
+                            color="indigo"
                             @click="createDialog = false"
                         >Cancel</v-btn>
                         <v-btn
                             color="indigo"
+                            class="white--text"
                             @click="create"
                         >Create</v-btn>
                     </v-card>
@@ -72,6 +70,7 @@
             :items="slotItems"
             :page.sync="page"
             :items-per-page="itemPerPage"
+            style="font-size: 16px;"
             class="elevation-1"
             hide-default-footer
             @page-count="pageCount = $event"
@@ -89,18 +88,15 @@
                 </v-icon>
             </template>
             <template v-slot:no-data>
-                <p style="color: #ff6347;">No Data</p>
+                <p style="color: #ff6347;">{{ message }}</p>
             </template>
         </v-data-table>
         <v-dialog
             v-model="editDialog"
             persistent
-            max-width="400"
+            max-width="500"
         >
-            <v-card
-                height=400
-                width=400
-            >
+            <v-card>
                 <p>Do you edit the selected element? :{{}}</p>
                 <v-text-field
                     v-model="editElement"
@@ -116,11 +112,12 @@
                 ></v-text-field>
                 <v-btn
                     outlined
-                    color="error"
+                    color="indigo"
                     @click="editDialog = false"
                 >Cancel</v-btn>
                 <v-btn
                     color="indigo"
+                    class="white--text"
                     @click="edit"
                 >Edit</v-btn>
             </v-card>
@@ -143,12 +140,9 @@
         <v-dialog
             v-model="delDialog"
             persistent
-            max-width="400"
+            max-width="500"
         >
-            <v-card
-                height=400
-                width=400
-            >
+            <v-card>
                 <p>Are you sure you want to delete the selected element? :{{}}</p>
                 <v-btn
                     outlined
@@ -156,7 +150,8 @@
                     @click="delDialog = false"
                 >Cancel</v-btn>
                 <v-btn
-                    color="indigo"
+                    color="error"
+                    class="white--text"
                     @click="del"
                 >Delete</v-btn>
             </v-card>
@@ -176,6 +171,43 @@
                 </v-btn>
             </template>
         </v-snackbar>
+        <v-dialog
+            v-model="runDialog"
+            persistent
+            style="overflow: hidden;"
+            max-width="500"
+        >
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="run"
+                >
+                    Run Roulette
+                </v-btn>
+            </template>
+            <v-card style="overflow: hidden;">
+                <v-row>
+                    <v-col align="center">
+                        <p>RESULT</p>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <p>{{ result.element }}</p>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <v-btn
+                            color="indigo"
+                            class="white--text"
+                            @click="clearResult"
+                    >OK</v-btn>
+                    </v-col>
+                </v-row>
+            </v-card>
+        </v-dialog>
     </div>
 </v-app>
 </template>
@@ -186,9 +218,9 @@ export default {
         return {
             headers: [
                 {text: "", align: "start", value: "id", class: "blue-grey darken-1"},
-                {text: "element", value: "element", class: "blue-grey darken-1"},
-                {text: "status", value: "status", class: "blue-grey darken-1"},
-                {text: "actions", value: "actions", class: "blue-grey darken-1"},
+                {text: "element", value: "element", class: "white--text blue-grey darken-1"},
+                {text: "status", value: "status", class: "white--text blue-grey darken-1"},
+                {text: "actions", value: "actions", class: "white--text blue-grey darken-1"},
             ],
             slotItems:[],
             page: 1,
@@ -204,7 +236,10 @@ export default {
             editStatus: "",
             editSuccess: false,
             delSuccess: false,
-            selectedId:""
+            selectedId:"",
+            message: "",
+            runDialog: "",
+            result: ""
         }
     },
     mounted() {
@@ -215,7 +250,9 @@ export default {
             axios
                 .get('/api/slots')
                 .then(res => {
-                    console.log(res.data);
+                    if(res.data.length === 0) {
+                        this.message = "No Data";
+                    }
                     this.slotItems = res.data;
                 })
         },
@@ -268,6 +305,19 @@ export default {
                         this.search();
                     }
                 })
+        },
+        run() {
+            this.runDialog = true;
+
+            axios
+                .get('/api/slot/run')
+                .then(res => {
+                    this.result =res.data;
+                })
+        },
+        clearResult() {
+            this.result = "";
+            this.runDialog = false;
         }
     }
 }

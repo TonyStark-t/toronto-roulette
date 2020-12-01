@@ -58,7 +58,7 @@ class SlotsService
     public function delete(int $id)
     {
         $delete = Slots::find($id);
-        
+
         if(is_null($delete)) {
             return false;
         }
@@ -68,5 +68,12 @@ class SlotsService
             return false;
         }
         return true;
+    }
+
+    public function runRoulette()
+    {
+        return Slots::where('status', 'enable')
+                    ->inRandomOrder()
+                    ->first();
     }
 }
