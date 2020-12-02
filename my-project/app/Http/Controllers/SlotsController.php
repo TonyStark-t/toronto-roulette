@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\SlotsService;
+use App\Http\Requests\SlotsRequest;
 use Illuminate\Http\Request;
 
 class SlotsController extends Controller
@@ -19,12 +20,12 @@ class SlotsController extends Controller
         return $this->service->load();
     }
 
-    public function create(Request $request)
+    public function create(SlotsRequest $request)
     {
         return $this->service->create($request);
     }
 
-    public function edit(Request $request)
+    public function edit(SlotsRequest $request)
     {
         return $this->service->edit($request);
     }

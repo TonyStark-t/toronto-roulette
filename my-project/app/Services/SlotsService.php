@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Slots;
+use App\Http\Requests\SlotsRequest;
 use Illuminate\Http\Request;
 
 class SlotsService
@@ -22,7 +23,7 @@ class SlotsService
      * 
      * 
      */
-    public function create(Request $request)
+    public function create(SlotsRequest $request)
     {
         $save = new Slots();
         $save->element = $request->input('element');
@@ -37,7 +38,7 @@ class SlotsService
      * 
      * 
      */
-    public function edit(Request $request)
+    public function edit(SlotsRequest $request)
     {
         $update = Slots::find($request->input('id'));
         if(is_null($update)) {

@@ -18,6 +18,7 @@
                         <v-btn
                             color="primary"
                             dark
+                            style="margin-left: 16px;"
                             v-bind="attrs"
                             v-on="on"
                         >
@@ -25,32 +26,64 @@
                         Add Element
                         </v-btn>
                     </template>
-                    <v-card style="overflow: hidden;">
-                        <p>Do you add a new element?</p>
-                        <v-text-field
-                            v-model="addElement"
-                            label="elemet"
-                            placeholder="test"
-                            outlined
-                        ></v-text-field>
-                        <v-select
-                            v-model="selectedStatus"
-                            :items="selectStatus"
-                            itemText="status"
-                            label="status"
-                            placeholder="Choose Status"
-                            outlined
-                        ></v-select>
-                        <v-btn
-                            outlined
-                            color="indigo"
-                            @click="createDialog = false"
-                        >Cancel</v-btn>
-                        <v-btn
-                            color="indigo"
-                            class="white--text"
-                            @click="create"
-                        >Create</v-btn>
+                    <v-card
+                        style="overflow: hidden;"
+                        height=500
+                    >
+                        <v-row>
+                            <v-col
+                                align="center"
+                                style="margin-top: 40px;"
+                            >
+                                <p>Do you add a new element?</p>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-spacer />
+                            <v-col
+                            cols=10
+                            align="center"
+                            style="margin-top: 36px;"
+                            >
+                                <v-text-field
+                                    v-model="addElement"
+                                    label="elemet"
+                                    :error-messages="err.element"
+                                    placeholder="test"
+                                    outlined
+                                ></v-text-field>
+                            </v-col>
+                            <v-spacer />
+                        </v-row>
+                        <v-row>
+                            <v-spacer />
+                            <v-col cols=10 align="center">
+                                <v-select
+                                    v-model="selectedStatus"
+                                    :items="selectStatus"
+                                    :error-messages="err.status"
+                                    itemText="status"
+                                    label="status"
+                                    placeholder="Choose Status"
+                                    outlined
+                                ></v-select>
+                            </v-col>
+                            <v-spacer />
+                        </v-row>
+                        <v-row>
+                            <v-col align="center">
+                                <v-btn
+                                    outlined
+                                    color="indigo"
+                                    @click="cancelCreate"
+                                >Cancel</v-btn>
+                                <v-btn
+                                    color="indigo"
+                                    class="white--text"
+                                    @click="create"
+                                >Create</v-btn>
+                            </v-col>
+                        </v-row>
                     </v-card>
                 </v-dialog>
                 <v-snackbar
@@ -104,33 +137,66 @@
             persistent
             max-width="500"
         >
-            <v-card>
-                <p>Do you edit the selected element?</p>
-                <p style="border: solid 2px #EDEDED">Selected Element : {{ editElement }}</p>
-                <v-text-field
-                    v-model="editElement"
-                    label="elemet"
-                    placeholder="test"
-                    outlined
-                ></v-text-field>
-                <v-select
-                    v-model="selectedStatus"
-                    :items="selectStatus"
-                    itemText="status"
-                    label="status"
-                    placeholder="Choose Status"
-                    outlined
-                ></v-select>
-                <v-btn
-                    outlined
-                    color="indigo"
-                    @click="editDialog = false"
-                >Cancel</v-btn>
-                <v-btn
-                    color="indigo"
-                    class="white--text"
-                    @click="edit"
-                >Edit</v-btn>
+            <v-card  style="overflow: hidden;" height=500>
+                <v-row>
+                    <v-col align="center" style="margin-top:40px;">
+                        <p>Do you edit the selected element?</p>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-spacer />
+                    <v-col cols=10 align="center">
+                        <p style="border-bottom: solid 2px #EDEDED">Selected Element : {{ editElement }}</p>
+                    </v-col>
+                    <v-spacer />
+                </v-row>
+                <v-row>
+                    <v-spacer />
+                    <v-col cols=10 align="center">
+                        <v-text-field
+                            v-model="editElement"
+                            label="elemet"
+                            :error-messages="err.element"
+                            placeholder="test"
+                            outlined
+                        ></v-text-field>
+                    </v-col>
+                    <v-spacer />
+                </v-row>
+                <v-row>
+                    <v-spacer />
+                    <v-col cols=10 align="center">
+                        <v-select
+                            v-model="selectedStatus"
+                            :items="selectStatus"
+                            itemText="status"
+                            label="status"
+                            placeholder="Choose Status"
+                            outlined
+                        ></v-select>
+                    </v-col>
+                    <v-spacer />
+                </v-row>
+                <v-row>
+                    <v-spacer />
+                    <v-col cols=10 align="center">
+                        <v-btn
+                            outlined
+                            color="indigo"
+                            height="40"
+                            width="100"
+                            @click="cancelEdit"
+                        >Cancel</v-btn>
+                        <v-btn
+                            color="indigo"
+                            class="white--text"
+                            height="40"
+                            width="100"
+                            @click="edit"
+                        >Edit</v-btn>
+                    </v-col>
+                    <v-spacer />
+                </v-row>
             </v-card>
         </v-dialog>
         <v-snackbar
@@ -153,19 +219,39 @@
             persistent
             max-width="500"
         >
-            <v-card>
-                <p>Are you sure you want to delete the selected element?</p>
-                <p  style="border: solid 2px #EDEDED">Selected Element : {{ selectedElement }}</p>
-                <v-btn
-                    outlined
-                    color="error"
-                    @click="delDialog = false"
-                >Cancel</v-btn>
-                <v-btn
-                    color="error"
-                    class="white--text"
-                    @click="del"
-                >Delete</v-btn>
+            <v-card  style="overflow: hidden;" height=500>
+                <v-row style="margin-top: 40px;">
+                    <v-col align="center">
+                        <p>Are you sure you want to delete the selected element?</p>
+                    </v-col>
+                </v-row>
+                <v-row style="margin-top: 48px;">
+                    <v-spacer />
+                    <v-col cols=10 align="center">
+                        <p  style="border-bottom: solid 2px #EDEDED">Selected Element : {{ selectedElement }}</p>
+                    </v-col>
+                    <v-spacer />
+                </v-row>
+                <v-row style="margin-top:40px;">
+                    <v-spacer />
+                    <v-col cols=10 align="center">
+                        <v-btn
+                            outlined
+                            color="error"
+                            height="40"
+                            width="100"
+                            @click="delDialog = false"
+                        >Cancel</v-btn>
+                        <v-btn
+                            color="error"
+                            class="white--text"
+                            height="40"
+                            width="100"
+                            @click="del"
+                        >Delete</v-btn>
+                    </v-col>
+                    <v-spacer />
+                </v-row>
             </v-card>
         </v-dialog>
         <v-snackbar
@@ -183,43 +269,49 @@
                 </v-btn>
             </template>
         </v-snackbar>
-        <v-dialog
-            v-model="runDialog"
-            persistent
-            style="overflow: hidden;"
-            max-width="500"
-        >
-            <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="run"
+        <v-row>
+            <v-col align="center">
+                <v-dialog
+                    v-model="runDialog"
+                    persistent
+                    max-width="500"
                 >
-                    Run Roulette
-                </v-btn>
-            </template>
-            <v-card style="overflow: hidden;">
-                <v-row>
-                    <v-col align="center">
-                        <p>RESULT</p>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <p>{{ result.element }}</p>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
+                    <template v-slot:activator="{ on, attrs }">
                         <v-btn
-                            color="indigo"
-                            class="white--text"
-                            @click="clearResult"
-                    >OK</v-btn>
-                    </v-col>
-                </v-row>
-            </v-card>
-        </v-dialog>
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="run"
+                        >
+                            Run Roulette
+                        </v-btn>
+                    </template>
+                    <v-card style="overflow: hidden;" height=500>
+                        <v-row style="margin-top: 40px;">
+                            <v-col align="center">
+                                <p style="font-size: 20px;">RESULT</p>
+                            </v-col>
+                        </v-row>
+                        <v-row style="margin-top: 48px;">
+                            <v-col align="center">
+                                <p v-if="result" style="font-size: 18px;">{{ result.element }}</p>
+                                <p v-else>Running…</p>
+                            </v-col>
+                        </v-row>
+                        <v-row style="margin-top: 40px;">
+                            <v-col align="center">
+                                <v-btn
+                                    color="indigo"
+                                    class="white--text"
+                                    height="40"
+                                    width="80"
+                                    @click="clearResult"
+                            >OK</v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-card>
+                </v-dialog>
+            </v-col>
+        </v-row>
     </div>
 </v-app>
 </template>
@@ -229,10 +321,10 @@ export default {
     data() {
         return {
             headers: [
-                {text: "", align: "start", value: "id", class: "blue-grey darken-1"},
-                {text: "element", value: "element", class: "white--text blue-grey darken-1"},
-                {text: "status", value: "status", class: "white--text blue-grey darken-1"},
-                {text: "actions", value: "actions", class: "white--text blue-grey darken-1"},
+                {text: "", align: "start", value: "id", width: "8%", class: "grey lighten-1"},
+                {text: "element", value: "element", width: "40%", class: "white--text grey lighten-1"},
+                {text: "status", value: "status", width: "30%", class: "white--text grey lighten-1"},
+                {text: "actions", align: "center", value: "actions", width: "22%", class: "white--text grey lighten-1"},
             ],
             slotItems:[],
             selectStatus:[
@@ -257,7 +349,8 @@ export default {
             runDialog: "",
             result: "",
             selectedStatus: "",
-            selectedElement: ""
+            selectedElement: "",
+            err:""
         }
     },
     mounted() {
@@ -293,8 +386,12 @@ export default {
                     this.createSuccess = true;
                     this.addElement = "";
                     this.status = "";
-                    this.selectStatus = "";
+                    this.selectedStatus = "";
                     this.search();
+                })
+                .catch(e => {
+                    console.log(e.response.data)
+                    this.err = e.response.data.errors;
                 })
         },
         edit() {
@@ -320,6 +417,10 @@ export default {
                     this.selectedStatus = "";
                     this.search();
                 })
+                .catch(e => {
+                    console.log(e.response.data)
+                    this.err = e.response.data.errors;
+                })
         },
         editFlg(item) {
             console.log(item)
@@ -331,6 +432,16 @@ export default {
             } else {
                 this.selectedStatus = 2;
             }
+        },
+        cancelCreate() {
+            this.createDialog =false;
+            this.selectedStatus = "";
+            this.err = "";
+        },
+        cancelEdit() {
+            this.editDialog =false;
+            this.selectedStatus = "";
+            this.err = "";
         },
         delFlg(item) {
             console.log(item.id)
