@@ -16,5 +16,9 @@ Route::get('/', function () {
 });
 
 Route::get('/test', function () {
-    return view('Test');
+    return view('tests.test');
 });
+
+// Route::get('/{any}', function () {
+//     return view('tests.test');
+// })->where('any', '.*');
