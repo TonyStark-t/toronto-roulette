@@ -19,6 +19,13 @@ export default {
             ],
             items: []
         }
+    },
+    mounted() {
+        axios.get('/api/master/getList', {
+            // 
+        }).then(res => {
+            this.items = res.data;
+        })
     }
 }
 </script>

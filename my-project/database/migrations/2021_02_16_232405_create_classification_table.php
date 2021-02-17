@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRegionTable extends Migration
+class CreateClassificationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateRegionTable extends Migration
      */
     public function up()
     {
-        Schema::create('regions', function (Blueprint $table) {
+        Schema::create('classifications', function (Blueprint $table) {
             $table->bigIncrements('id')->comment('ID');
-            $table->bigInteger('category_id')->unsigned();
-            $table->foreign('category_id')->references('id')->on('categories')->nullable()->comment('カテゴリーID:カテゴリーテーブルへのリレーション');
-            $table->string('name')->comment('領域名');
+
+            $table->string('classification')->comment('分類');
             $table->string('remarks')->nullable()->comment('備考');
 
             $table->timestamps();
@@ -30,7 +29,7 @@ class CreateRegionTable extends Migration
         //     $table->bigInteger('deleted_user_id')->after('deleted_at')->nullable()->comment('削除者ID:ユーザーテーブルへのリレーション');
         // });
 
-        DB::statement("ALTER TABLE `regions` COMMENT '領域:領域名を格納する。'");
+        DB::statement("ALTER TABLE `classifications` COMMENT '分類:1001：month、1002：week、1003：basic、1004：credit、1005：year'");
     }
 
     /**
@@ -40,6 +39,6 @@ class CreateRegionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('region');
+        Schema::dropIfExists('classification');
     }
 }

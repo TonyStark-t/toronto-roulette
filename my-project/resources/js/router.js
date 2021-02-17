@@ -11,6 +11,12 @@ const routes = [
         path: '/test',
         component: require('./components/Test.vue').default,
         props: true
+    },
+    {
+        name: 'master',
+        path: '/master',
+        component: require('./components/Master.vue').default,
+        props: true
     }
 ]
 

@@ -19,6 +19,10 @@ Route::get('/test', function () {
     return view('tests.test');
 });
 
+Route::get('/master', function() {
+    return view('masters.master');
+});
+
 // Route::get('/{any}', function () {
 //     return view('tests.test');
 // })->where('any', '.*');
