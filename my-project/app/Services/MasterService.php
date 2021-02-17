@@ -9,7 +9,6 @@ class MasterService
 {
     public function getList()
     {
-        return Classification::from('classifications')
-                    ->get();
+        return Classification::all();
     }
 }

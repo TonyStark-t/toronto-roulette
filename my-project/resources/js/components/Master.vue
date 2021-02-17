@@ -1,9 +1,9 @@
 <template>
 <div>
-    <v-data-table
+    <!-- <v-data-table
         :headers='headers'
         :items='items'
-    ></v-data-table>
+    ></v-data-table> -->
 </div>
 </template>
 
@@ -25,6 +25,7 @@ export default {
             // 
         }).then(res => {
             this.items = res.data;
+            console.log(this.items)
         })
     }
 }
